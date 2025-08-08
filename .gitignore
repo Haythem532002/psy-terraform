@@ -1,2 +1,6 @@
 terraform-resource-reference.md
+.terraform 
+.terraform.*
 providers.tf
+terraform.tfstate
+terraform.tfstate.*

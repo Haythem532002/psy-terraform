@@ -12,3 +12,5 @@ variable "address_prefixes_bastion" {
 }
 variable "location" {}
 variable "resource_group_name" {}
+variable "dns_zone_name" {}
+variable "dns_vnet_link" {}

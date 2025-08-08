@@ -12,6 +12,16 @@ resource "azurerm_subnet" "subnet_app" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = var.address_prefixes_app
+
+  delegation {
+    name = "psql-delegation"
+    service_delegation {
+      name = "Microsoft.DBforPostgreSQL/flexibleServers"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
+    }
+  }
 }
 
 # Create a subnet for Bastion VM (SSH allowed here)
@@ -46,3 +56,20 @@ resource "azurerm_subnet_network_security_group_association" "assoc_bastion" {
   subnet_id                 = azurerm_subnet.subnet_bastion.id
   network_security_group_id = azurerm_network_security_group.nsg_bastion.id
 }
+
+
+
+resource "azurerm_private_dns_zone" "postgres_dns" {
+  name = var.dns_zone_name
+  resource_group_name = var.resource_group_name
+}
+
+
+resource "azurerm_private_dns_zone_virtual_network_link" "postgres_vnet_link" {
+  name = var.dns_vnet_link
+  private_dns_zone_name = azurerm_private_dns_zone.postgres_dns.name
+  resource_group_name = var.resource_group_name
+  virtual_network_id = azurerm_virtual_network.vnet.id
+  depends_on = [ azurerm_subnet.subnet_app ]
+}
+
