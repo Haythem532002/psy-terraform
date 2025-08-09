@@ -60,14 +60,6 @@
 
 ---
 
-### 🔹 7. **Azure Container Registry (ACR)**
-
-| Nom              | Rôle                                                                             |
-| ---------------- | -------------------------------------------------------------------------------- |
-| `acr-devops-app` | Stocker tes images Docker (Angular + Spring Boot) construites via GitHub Actions |
-
----
-
 ## ✅ Résumé simplifié
 
 | Catégorie              | Ressources (noms)                                            | Utilité principale                                |

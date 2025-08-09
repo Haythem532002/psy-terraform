@@ -8,6 +8,7 @@ resource "azurerm_postgresql_flexible_server" "pg-server" {
   delegated_subnet_id = var.subnet_id
   private_dns_zone_id = var.dns_zone_id
   public_network_access_enabled = false
+  
   authentication {
     password_auth_enabled         = true
     active_directory_auth_enabled = false
@@ -25,13 +26,5 @@ resource "azurerm_postgresql_flexible_server_database" "pg-db" {
   server_id = azurerm_postgresql_flexible_server.pg-server.id
   collation = var.collation
   charset = "UTF8"
-}
-
-
-resource "azurerm_postgresql_flexible_server_firewall_rule" "db-firewall" {
-  name             = var.firewall_name
-  server_id        = azurerm_postgresql_flexible_server.pg-server.id
-  start_ip_address = var.start_ip
-  end_ip_address   = var.end_ip
 }
 
