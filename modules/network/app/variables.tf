@@ -6,10 +6,6 @@ variable "location" {
   type = string
 }
 
-variable "vnet_id" {
-  type = string
-}
-
 variable "subnet_name_app" {
   type = string
 }

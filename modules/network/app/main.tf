@@ -29,6 +29,6 @@ resource "azurerm_private_dns_zone_virtual_network_link" "postgres_vnet_link" {
   name                  = var.dns_vnet_link
   private_dns_zone_name  = azurerm_private_dns_zone.postgres_dns.name
   resource_group_name    = var.resource_group_name
-  virtual_network_id     = var.vnet_id
+  virtual_network_id     = azurerm_virtual_network.vnet.id
   depends_on            = [azurerm_subnet.subnet_app]
 }

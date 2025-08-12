@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "rg-shared" {
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                     = "terraformpsystorage"
+  name                     = "psy-storage-account"
   resource_group_name      = azurerm_resource_group.rg-shared.name
   location                 = azurerm_resource_group.rg-shared.location
   account_tier             = "Standard"
@@ -36,7 +36,7 @@ module "vm-bastion" {
   resource_group_name = azurerm_resource_group.rg-shared.name
   location            = azurerm_resource_group.rg-shared.location
   vm_name             = "bastion-vm"
-  vm_size             = "Standard_B1ms"
+  vm_size             = "Standard_B2s"
   admin_username      = "azureuser"
   ssh_public_key      = file("~/.ssh/id_rsa.pub")
   subnet_id           = module.network-shared.subnet_id_bastion
@@ -50,7 +50,7 @@ module "vm-sonarqube" {
   resource_group_name = azurerm_resource_group.rg-shared.name
   location            = azurerm_resource_group.rg-shared.location
   vm_name             = "sonarqube-vm"
-  vm_size             = "Standard_B1ms"
+  vm_size             = "Standard_B2s"
   admin_username      = "azureuser"
   ssh_public_key      = file("~/.ssh/id_rsa.pub")
   subnet_id           = module.network-shared.subnet_id_sonarqube

@@ -17,7 +17,7 @@ resource "azurerm_postgresql_flexible_server" "pg-server" {
 
   storage_mb             = 32768 
 
-  sku_name = "Standard_B1ms"
+  sku_name = "Standard_B2s"
 }
 
 

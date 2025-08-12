@@ -11,6 +11,3 @@ variable "dns_zone_id" {}
 
 variable "db_name" {}
 variable "collation" {}
-variable "firewall_name" {}
-variable "start_ip" {}
-variable "end_ip" {}
