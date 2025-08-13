@@ -36,7 +36,7 @@ module "postgres-int-app" {
   admin_password = "haythem"
   collation      = "en_US.utf8"
   dns_zone_id    = module.network-int-app.dns_zone_id
-  server_name    = "integration-postgres-server"
+  server_name    = "psy-server"
   db_name        = "psy_project"
   version        = "16"
 }
