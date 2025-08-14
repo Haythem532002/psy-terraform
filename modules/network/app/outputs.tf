@@ -5,3 +5,7 @@ output "subnet_id" {
 output "private_dns_zone_id" {
   value = azurerm_private_dns_zone.postgres_dns.id
 }
+
+output "vnet_name" {
+  value = azurerm_virtual_network.vnet.name
+}

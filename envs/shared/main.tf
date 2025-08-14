@@ -58,3 +58,36 @@ module "vm-sonarqube" {
   create_public_ip    = false
   public_ip_name      = "sonarqube-public-ip"
 }
+
+
+
+data "azurerm_virtual_network" "integration_vnet" {
+  name                = "integration-vnet"
+  resource_group_name = "rg-int"
+}
+
+
+resource "azurerm_virtual_network_peering" "shared_to_integration" {
+  name = "shared-to-integration"
+  resource_group_name = azurerm_resource_group.rg-shared.name
+  virtual_network_name = module.network-shared.vnet_name
+  remote_virtual_network_id = data.azurerm_virtual_network.integration_vnet.id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic = true
+}
+
+
+
+data "azurerm_virtual_network" "preprod_vnet" {
+  name = "preprod_vnet"
+  resource_group_name = "preprod-rg"
+}
+
+resource "azurerm_virtual_network_peering" "shared_to_preprod" {
+  name = "shared-to-preprod"
+  resource_group_name = azurerm_resource_group.rg-shared.name
+  virtual_network_name = module.network-shared.vnet_name
+  remote_virtual_network_id = data.azurerm_virtual_network.integration_vnet.id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic = true
+}

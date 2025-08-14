@@ -6,10 +6,10 @@ resource "azurerm_resource_group" "rg-preprod" {
 module "network-preprod-app" {
   source                = "../../modules/network/app"
   vnet_name             = "preprod-vnet"
-  address_space         = ["10.0.0.0/16"]
+  address_space         = ["10.2.0.0/16"]
   resource_group_name   = azurerm_resource_group.rg-preprod.name
   location              = azurerm_resource_group.rg-preprod.location
-  address_prefixes_app  = ["10.0.1.0/24"]
+  address_prefixes_app  = ["10.2.0.0/24"]
   subnet_name_app       = "preprod-subnet-app"
   dns_zone_name         = "pg.postgres.database.azure.com"
   dns_vnet_link         = "preprod-dns-link"
@@ -39,4 +39,21 @@ module "postgres-preprod-app" {
   server_name    = "psy-server"
   db_name        = "psy_project"
   version        = "16"
+}
+
+
+data "azurerm_virtual_network" "preprod_vnet" {
+  name = "preprod-to-shared"
+  resource_group_name = azurerm_resource_group.rg-preprod.name
+}
+
+
+
+resource "azurerm_virtual_network_peering" "preprod_to_shared" {
+  name = "preprod-to-shared"
+  resource_group_name = azurerm_resource_group.rg-preprod.name
+  virtual_network_name = module.network-preprod-app.vnet_name
+  remote_virtual_network_id = data.azurerm_virtual_network.preprod_vnet.id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic = true
 }
