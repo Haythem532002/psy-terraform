@@ -42,9 +42,9 @@ module "postgres-preprod-app" {
 }
 
 
-data "azurerm_virtual_network" "preprod_vnet" {
-  name = "preprod-to-shared"
-  resource_group_name = azurerm_resource_group.rg-preprod.name
+data "azurerm_virtual_network" "shared_vnet" {
+  name = "shared-vnet"
+  resource_group_name = "rg-shared"
 }
 
 
@@ -53,7 +53,7 @@ resource "azurerm_virtual_network_peering" "preprod_to_shared" {
   name = "preprod-to-shared"
   resource_group_name = azurerm_resource_group.rg-preprod.name
   virtual_network_name = module.network-preprod-app.vnet_name
-  remote_virtual_network_id = data.azurerm_virtual_network.preprod_vnet.id
+  remote_virtual_network_id = data.azurerm_virtual_network.shared_vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic = true
 }

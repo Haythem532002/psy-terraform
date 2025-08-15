@@ -79,7 +79,7 @@ resource "azurerm_virtual_network_peering" "shared_to_integration" {
 
 
 data "azurerm_virtual_network" "preprod_vnet" {
-  name = "preprod_vnet"
+  name = "preprod-vnet"
   resource_group_name = "preprod-rg"
 }
 
@@ -87,7 +87,7 @@ resource "azurerm_virtual_network_peering" "shared_to_preprod" {
   name = "shared-to-preprod"
   resource_group_name = azurerm_resource_group.rg-shared.name
   virtual_network_name = module.network-shared.vnet_name
-  remote_virtual_network_id = data.azurerm_virtual_network.integration_vnet.id
+  remote_virtual_network_id = data.azurerm_virtual_network.preprod_vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic = true
 }
