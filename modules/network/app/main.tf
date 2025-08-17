@@ -32,3 +32,21 @@ resource "azurerm_private_dns_zone_virtual_network_link" "postgres_vnet_link" {
   virtual_network_id     = azurerm_virtual_network.vnet.id
   depends_on            = [azurerm_subnet.subnet_app]
 }
+
+
+
+resource "azurerm_network_security_group" "app_ngs" {
+  name = "app-nsg"
+  resource_group_name = var.resource_group_name
+  location = var.location
+
+  security_rule {
+    name = "AppToSonarqube"
+    priority = 110
+    access = "Allow"
+    direction = "Outbound"
+    protocol = "Tcp"
+    destination_port_range = "9000"
+    destination_address_prefix = "10.1.2.0/24"
+  }
+}

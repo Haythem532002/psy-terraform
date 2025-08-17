@@ -22,7 +22,7 @@ module "vm-int-app" {
   admin_username      = "adminuser"
   subnet_id           = module.network-int-app.subnet_id
   location            = azurerm_resource_group.rg-int.location
-  ssh_public_key      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD..."
+  ssh_public_key      = file("~/.ssh/id_rsa.pub")
   vm_size             = "Standard_B2s"
   resource_group_name = azurerm_resource_group.rg-int.name
   create_public_ip    = false
