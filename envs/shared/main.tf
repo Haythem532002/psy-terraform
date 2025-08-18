@@ -38,7 +38,7 @@ module "vm-bastion" {
   vm_name             = "bastion-vm"
   vm_size             = "Standard_B2s"
   admin_username      = "azureuser"
-  ssh_public_key      = file("~/.ssh/id_rsa.pub")
+  ssh_public_key      = file(var.ssh_public_key_path)
   subnet_id           = module.network-shared.subnet_id_bastion
   nic_name            = "bastion-nic"
   create_public_ip    = true
@@ -52,7 +52,7 @@ module "vm-sonarqube" {
   vm_name             = "sonarqube-vm"
   vm_size             = "Standard_B2s"
   admin_username      = "azureuser"
-  ssh_public_key      = file("~/.ssh/id_rsa.pub")
+  ssh_public_key      = file(var.ssh_public_key_path)
   subnet_id           = module.network-shared.subnet_id_sonarqube
   nic_name            = "sonarqube-nic"
   create_public_ip    = false

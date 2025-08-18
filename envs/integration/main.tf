@@ -22,7 +22,7 @@ module "vm-int-app" {
   admin_username      = "adminuser"
   subnet_id           = module.network-int-app.subnet_id
   location            = azurerm_resource_group.rg-int.location
-  ssh_public_key      = file("~/.ssh/id_rsa.pub")
+  ssh_public_key      = file(var.ssh_public_key_path)
   vm_size             = "Standard_B2s"
   resource_group_name = azurerm_resource_group.rg-int.name
   create_public_ip    = false
@@ -30,15 +30,17 @@ module "vm-int-app" {
 }
 
 module "postgres-int-app" {
-  source         = "../../modules/postgresql"
-  subnet_id      = module.network-int-app.subnet_id_app
-  admin_login    = "postgres"
-  admin_password = "haythem"
-  collation      = "en_US.utf8"
-  dns_zone_id    = module.network-int-app.dns_zone_id
-  server_name    = "psy-server"
-  db_name        = "psy_project"
-  version        = "16"
+  source              = "../../modules/postgresql"
+  resource_group_name = azurerm_resource_group.rg-int.name
+  location            = azurerm_resource_group.rg-int.location
+  subnet_id           = module.network-int-app.subnet_id_app
+  admin_login         = "postgres"
+  admin_password      = var.postgres_password 
+  collation           = "en_US.utf8"
+  dns_zone_id         = module.network-int-app.dns_zone_id
+  server_name         = "psy-server-int"  # Make environment-specific
+  db_name             = "psy_project"
+  version             = "16"
 }
 
 
