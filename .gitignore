@@ -4,3 +4,5 @@ terraform-resource-reference.md
 providers.tf
 terraform.tfstate
 terraform.tfstate.*
+*.pub
+*_key

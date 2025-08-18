@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "rg-shared" {
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                     = "psy-storage-account"
+  name                     = "psystorageaccount"
   resource_group_name      = azurerm_resource_group.rg-shared.name
   location                 = azurerm_resource_group.rg-shared.location
   account_tier             = "Standard"
@@ -24,10 +24,10 @@ module "network-shared" {
   resource_group_name = azurerm_resource_group.rg-shared.name
   location            = azurerm_resource_group.rg-shared.location
 
-  subnet_name_bastion      = "AzureBastionSubnet"
+  subnet_name_bastion      = "bastion-subnet"
   address_prefixes_bastion = ["10.1.1.0/24"]
 
-  subnet_name_sonarqube      = "sonarqube-subnet"
+  subnet_name_sonarqube      = "SonarqubeSubnet"
   address_prefixes_sonarqube = ["10.1.2.0/24"]
 }
 
@@ -36,9 +36,9 @@ module "vm-bastion" {
   resource_group_name = azurerm_resource_group.rg-shared.name
   location            = azurerm_resource_group.rg-shared.location
   vm_name             = "bastion-vm"
-  vm_size             = "Standard_B2s"
+  vm_size             = "Standard_B1s"
   admin_username      = "azureuser"
-  ssh_public_key      = file(var.ssh_public_key_path)
+  ssh_public_key      = file("${path.module}/shared_key.pub")
   subnet_id           = module.network-shared.subnet_id_bastion
   nic_name            = "bastion-nic"
   create_public_ip    = true
@@ -50,9 +50,9 @@ module "vm-sonarqube" {
   resource_group_name = azurerm_resource_group.rg-shared.name
   location            = azurerm_resource_group.rg-shared.location
   vm_name             = "sonarqube-vm"
-  vm_size             = "Standard_B2s"
+  vm_size             = "Standard_B1s"
   admin_username      = "azureuser"
-  ssh_public_key      = file(var.ssh_public_key_path)
+  ssh_public_key      = file("${path.module}/sonarqube_key.pub")
   subnet_id           = module.network-shared.subnet_id_sonarqube
   nic_name            = "sonarqube-nic"
   create_public_ip    = false
@@ -61,33 +61,33 @@ module "vm-sonarqube" {
 
 
 
-data "azurerm_virtual_network" "integration_vnet" {
-  name                = "integration-vnet"
-  resource_group_name = "rg-int"
-}
+# data "azurerm_virtual_network" "integration_vnet" {
+#   name                = "integration-vnet"
+#   resource_group_name = "rg-int"
+# }
 
 
-resource "azurerm_virtual_network_peering" "shared_to_integration" {
-  name = "shared-to-integration"
-  resource_group_name = azurerm_resource_group.rg-shared.name
-  virtual_network_name = module.network-shared.vnet_name
-  remote_virtual_network_id = data.azurerm_virtual_network.integration_vnet.id
-  allow_virtual_network_access = true
-  allow_forwarded_traffic = true
-}
+# resource "azurerm_virtual_network_peering" "shared_to_integration" {
+#   name = "shared-to-integration"
+#   resource_group_name = azurerm_resource_group.rg-shared.name
+#   virtual_network_name = module.network-shared.vnet_name
+#   remote_virtual_network_id = data.azurerm_virtual_network.integration_vnet.id
+#   allow_virtual_network_access = true
+#   allow_forwarded_traffic = true
+# }
 
 
 
-data "azurerm_virtual_network" "preprod_vnet" {
-  name = "preprod-vnet"
-  resource_group_name = "preprod-rg"
-}
+# data "azurerm_virtual_network" "preprod_vnet" {
+#   name = "preprod-vnet"
+#   resource_group_name = "preprod-rg"
+# }
 
-resource "azurerm_virtual_network_peering" "shared_to_preprod" {
-  name = "shared-to-preprod"
-  resource_group_name = azurerm_resource_group.rg-shared.name
-  virtual_network_name = module.network-shared.vnet_name
-  remote_virtual_network_id = data.azurerm_virtual_network.preprod_vnet.id
-  allow_virtual_network_access = true
-  allow_forwarded_traffic = true
-}
+# resource "azurerm_virtual_network_peering" "shared_to_preprod" {
+#   name = "shared-to-preprod"
+#   resource_group_name = azurerm_resource_group.rg-shared.name
+#   virtual_network_name = module.network-shared.vnet_name
+#   remote_virtual_network_id = data.azurerm_virtual_network.preprod_vnet.id
+#   allow_virtual_network_access = true
+#   allow_forwarded_traffic = true
+# }
